@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import useForm from 'react-hook-form';
-import { createUseStyles } from 'react-jss';
+import { makeStyles } from '@material-ui/core/styles';
 import { TextField, IconButton, Paper } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { searchMovies } from '../actions/movies';
@@ -16,13 +16,13 @@ type DispatchProps = {
 
 type P = DispatchProps;
 
-const useStyles = createUseStyles({
+const useStyles = makeStyles({
   form: {
     margin: '30px auto',
     padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    width: 400,
+    width: 400
   },
   input: {
     flex: 1
@@ -35,10 +35,10 @@ const useStyles = createUseStyles({
 const connectDecorator = connect<{}, DispatchProps, {}>(null, { searchMovies });
 
 const MovieSearchForm = (props: P) => {
-  const classes = useStyles();
+  const classes = useStyles({});
   const { handleSubmit, register } = useForm<FormData>();
   const onSubmit = (formValues: FormData) => {
-    props.searchMovies({ search: formValues.movieSearch });
+    props.searchMovies({ search: formValues.movieSearch, page: 1 });
   };
 
   return (

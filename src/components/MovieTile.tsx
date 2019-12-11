@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardMedia, CardContent, Typography } from '@material-ui/core';
-// import { createUseStyles } from 'react-jss';
 import { makeStyles } from '@material-ui/core/styles';
 import { MovieSearchResult } from '../services/movies';
 
@@ -9,21 +8,23 @@ type P = {
   movie: MovieSearchResult;
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
-    height: 435,
+    height: 360,
     textAlign: 'center',
     '& a': {
       textDecoration: 'none'
     }
   },
   poster: {
-    height: 350
+    height: 280,
+    backgroundSize: 'contain',
+    backgroundColor: theme.palette.text.primary
   }
-});
+}));
 
 export const MovieTile = (props: P) => {
-  const classes = useStyles();
+  const classes = useStyles({});
   const { movie } = props;
 
   return (
@@ -33,12 +34,13 @@ export const MovieTile = (props: P) => {
           className={classes.poster}
           image={movie.Poster}
           title={movie.Title}
+          component="div"
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
+          <Typography variant="body1" color="textPrimary" noWrap>
             {movie.Title}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography variant="body2" color="textSecondary">
             {movie.Year}
           </Typography>
         </CardContent>

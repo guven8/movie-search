@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createUseStyles } from 'react-jss';
+import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Typography, CssBaseline, Container } from '@material-ui/core';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import { MovieSearchForm } from './components/MovieSearchForm';
@@ -9,7 +9,7 @@ import { MovieSearchResults } from './components/MovieSearchResults';
 import { MoviePage } from './components/MoviePage';
 import store from './store';
 
-const useStyles = createUseStyles({
+const useStyles = makeStyles({
   title: {
     flexGrow: 1,
     textAlign: 'center',
@@ -18,7 +18,7 @@ const useStyles = createUseStyles({
 });
 
 const App = () => {
-  const classes = useStyles();
+  const classes = useStyles({});
 
   return (
     <Provider store={store}>
