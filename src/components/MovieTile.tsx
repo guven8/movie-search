@@ -10,14 +10,14 @@ type P = {
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    height: 360,
+    height: 300,
     textAlign: 'center',
     '& a': {
       textDecoration: 'none'
     }
   },
   poster: {
-    height: 280,
+    height: 230,
     backgroundSize: 'contain',
     backgroundColor: theme.palette.text.primary
   }

@@ -6,6 +6,7 @@
     "lib": ["dom", "esnext"],
     "module": "esnext",
     "esModuleInterop": true,
+    "experimentalDecorators": true
   },
   "include": [
       "src/**/*.tsx",

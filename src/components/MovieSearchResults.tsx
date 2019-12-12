@@ -1,20 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid } from '@material-ui/core';
+import { withRouter, RouteComponentProps } from 'react-router';
+import { Grid, CircularProgress } from '@material-ui/core';
 import { range } from 'lodash';
 import { AppState } from '../reducers';
 import { MovieTile } from './MovieTile';
 import { makeStyles } from '@material-ui/core/styles';
-import { MovieSearchResultsState } from '../reducers/movies';
 import { searchMovies } from '../actions/movies';
+import { MovieSearchResult } from '../services/movies';
+import { updateQuery } from '../common/util';
 
-type StateProps = MovieSearchResultsState;
-
-type DispatchProps = {
-  searchMovies: typeof searchMovies;
+type StateProps = {
+  results: MovieSearchResult[];
+  totalResults: string | null;
 };
-
-type P = StateProps & DispatchProps;
+type P = StateProps & RouteComponentProps;
 
 const useStyles = makeStyles({
   pagination: {
@@ -25,38 +25,40 @@ const useStyles = makeStyles({
   }
 });
 
-const connectDecorator = connect<StateProps, DispatchProps>(
-  (state: AppState) => ({
-    ...state.movies.searchResults
-  }),
-  { searchMovies }
-);
+const connectDecorator = connect((state: AppState) => ({
+  results: state.movies.searchResults.results,
+  totalResults: state.movies.searchResults.totalResults
+}));
 
 const MovieSearchResults = (props: P) => {
-  if (!props.results.length) return null;
   const classes = useStyles({});
   const totalResults = parseInt(props.totalResults);
   const goToPage = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
-    props.searchMovies({ search: props.search, page: parseInt(e.currentTarget.text) });
-  }
+    props.history.push({
+      pathname: props.location.pathname,
+      search: updateQuery(props.location.search, {
+        page: e.currentTarget.text
+      })
+    });
+  };
   
+  if (!props.results.length) return <CircularProgress />;
+
   return (
     <div>
       <Grid container spacing={4}>
-        {props.results.map((movie) => (
-          <Grid key={movie.imdbID} xs={3} item>
+        {props.results.map((movie, i) => (
+          <Grid key={movie.imdbID + i} xs={3} item>
             <MovieTile movie={movie} />
           </Grid>
         ))}
       </Grid>
       {totalResults > 10 && (
         <ul className={classes.pagination}>
-          {range(Math.ceil(totalResults / 10)).map((i: number) => (
+          {range(totalResults / 10).map((i: number) => (
             <li key={i}>
-              <a onClick={goToPage}>
-                {i + 1}
-              </a>
+              <a onClick={goToPage}>{i + 1}</a>
             </li>
           ))}
         </ul>
@@ -65,5 +67,7 @@ const MovieSearchResults = (props: P) => {
   );
 };
 
-const decoratedComponent = connectDecorator(MovieSearchResults);
+const decoratedComponent = connectDecorator(
+  withRouter(MovieSearchResults) as any
+);
 export { decoratedComponent as MovieSearchResults };

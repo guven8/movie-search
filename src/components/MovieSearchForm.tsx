@@ -1,20 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import useForm from 'react-hook-form';
+import { withRouter, RouteComponentProps } from 'react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, IconButton, Paper } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { searchMovies } from '../actions/movies';
+import { updateQuery } from '../common/util';
 
 type FormData = {
   movieSearch: string;
 };
-
-type DispatchProps = {
-  searchMovies: typeof searchMovies;
-};
-
-type P = DispatchProps;
+type P = RouteComponentProps;
 
 const useStyles = makeStyles({
   form: {
@@ -32,13 +27,14 @@ const useStyles = makeStyles({
   }
 });
 
-const connectDecorator = connect<{}, DispatchProps, {}>(null, { searchMovies });
-
 const MovieSearchForm = (props: P) => {
   const classes = useStyles({});
   const { handleSubmit, register } = useForm<FormData>();
   const onSubmit = (formValues: FormData) => {
-    props.searchMovies({ search: formValues.movieSearch, page: 1 });
+    props.history.push({
+      pathname: props.location.pathname,
+      search: updateQuery('', { search: formValues.movieSearch })
+    });
   };
 
   return (
@@ -67,5 +63,5 @@ const MovieSearchForm = (props: P) => {
   );
 };
 
-const decoratedComponent = connectDecorator(MovieSearchForm);
+const decoratedComponent = withRouter(MovieSearchForm);
 export { decoratedComponent as MovieSearchForm };

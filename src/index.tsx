@@ -1,46 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Typography, CssBaseline, Container } from '@material-ui/core';
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
-import { MovieSearchForm } from './components/MovieSearchForm';
-import { MovieSearchResults } from './components/MovieSearchResults';
-import { MoviePage } from './components/MoviePage';
+import { CssBaseline } from '@material-ui/core';
+import { BrowserRouter } from 'react-router-dom';
 import store from './store';
+import { App } from './App';
 
-const useStyles = makeStyles({
-  title: {
-    flexGrow: 1,
-    textAlign: 'center',
-    padding: '15px 0'
-  }
-});
+const Root = () => (
+  <Provider store={store}>
+    <CssBaseline />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
+);
 
-const App = () => {
-  const classes = useStyles({});
-
-  return (
-    <Provider store={store}>
-      <CssBaseline />
-      <BrowserRouter>
-        <AppBar position="static">
-          <Typography variant="h4" className={classes.title}>
-            Movie Search
-          </Typography>
-        </AppBar>
-        <Container maxWidth="lg">
-          <Switch>
-            <Route path="/details" component={MoviePage} />
-            <Route path="/">
-              <MovieSearchForm />
-              <MovieSearchResults />
-            </Route>
-          </Switch>
-        </Container>
-      </BrowserRouter>
-    </Provider>
-  );
-};
-
-ReactDOM.render(<App />, document.querySelector('#root'));
+ReactDOM.render(<Root />, document.querySelector('#root'));

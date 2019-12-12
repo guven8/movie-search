@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
+import { CircularProgress } from '@material-ui/core';
 import { AppState } from '../reducers';
 import { getMovieById } from '../actions/movies';
 import { MoviesState } from '../reducers/movies';
@@ -26,7 +27,9 @@ const MoviePage = (props: P) => {
     props.getMovieById(movieId);
   }, []);
   const movie = props.moviesById[movieId];
-  if (!movie) return <span>loading...</span>;
+
+  if (!movie) return <CircularProgress />;
+
   return (
     <div>
       <h2>{movie.Title}</h2>
@@ -36,5 +39,5 @@ const MoviePage = (props: P) => {
   );
 };
 
-const decoratedComponent = connectDecorator(MoviePage);
+const decoratedComponent = connectDecorator(MoviePage as any);
 export { decoratedComponent as MoviePage };

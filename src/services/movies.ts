@@ -4,7 +4,7 @@ import config from '../config';
 type MovieRating = {
   Source: string;
   Value: string;
-}
+};
 
 export type Movie = {
   Title: string;
@@ -32,9 +32,12 @@ export type Movie = {
   Production: string;
   Website: string;
   Response: string;
-}
+};
 
-export type MovieSearchResult = Pick<Movie, 'Title' | 'Year' | 'imdbID' | 'Type' | 'Poster'>;
+export type MovieSearchResult = Pick<
+  Movie,
+  'Title' | 'Year' | 'imdbID' | 'Type' | 'Poster'
+>;
 
 export type MovieSearchDTO = {
   search: string;
@@ -46,7 +49,7 @@ export type MovieSearchDTO = {
 export type MovieSearchResults = {
   Search: MovieSearchResult[];
   totalResults: string;
-}
+};
 
 export class MovieService extends RemoteService {
   baseUri = config.baseUri;

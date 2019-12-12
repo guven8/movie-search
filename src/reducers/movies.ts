@@ -7,15 +7,11 @@ import { combineReducers } from 'redux';
 export type MovieSearchResultsState = {
   results: MovieSearchResult[];
   totalResults: string | null;
-  search: string | null;
-  // page: number | null;
 };
 
 const movieSearchResultsInitialState = {
   results: [],
-  totalResults: null,
-  search: null,
-  // page: null
+  totalResults: null
 };
 
 function movieSearchResultsReducer(
@@ -23,11 +19,9 @@ function movieSearchResultsReducer(
   action: ReduxAction
 ) {
   if (isType(action, searchMoviesAsync.done)) {
-    console.log(action.payload.result);
     state = {
       results: action.payload.result.Search,
-      totalResults: action.payload.result.totalResults,
-      search: action.payload.params.search
+      totalResults: action.payload.result.totalResults
     };
   }
 
