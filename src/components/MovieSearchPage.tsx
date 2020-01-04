@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
-import { MovieSearchForm } from './MovieSearchForm';
 import { MovieSearchResults } from './MovieSearchResults';
 import { searchMovies } from '../actions/movies';
-import { getMovieSearchFromQueryParams } from '../common/util';
+import { parseQuery } from '../common/util';
+import { MovieAutoComplete } from './MovieSearchInput';
 
 type DispatchProps = {
   searchMovies: typeof searchMovies;
@@ -18,12 +18,13 @@ const connectDecorator = connect<{}, DispatchProps, RouteComponentProps>(null, {
 
 const MovieSearchPage = (props: P) => {
   useEffect(() => {
-    props.searchMovies(getMovieSearchFromQueryParams(props.location.search));
+    const movieSearchDTO = parseQuery(props.location.search);
+    if (movieSearchDTO.search) props.searchMovies(movieSearchDTO);
   }, [props.location.search]);
 
   return (
     <>
-      <MovieSearchForm />
+      {/* <MovieAutoComplete /> */}
       <MovieSearchResults />
     </>
   );

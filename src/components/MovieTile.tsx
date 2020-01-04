@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme) => ({
   },
   poster: {
     height: 230,
-    backgroundSize: 'contain',
+    backgroundSize: 'cover',
+    backgroundPositionY: 0,
     backgroundColor: theme.palette.text.primary
   }
 }));

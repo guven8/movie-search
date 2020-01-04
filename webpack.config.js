@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.tsx',
+  entry: './src/index',
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     historyApiFallback: true,
@@ -18,11 +18,7 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader',
-        exclude: path.resolve(__dirname, 'node_modules')
-      }
+      { test: /\.(ts|js)x?$/, exclude: /node_modules/, loader: "babel-loader" }
     ]
   }
 };

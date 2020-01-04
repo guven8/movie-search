@@ -1,14 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { Grid, CircularProgress } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { range } from 'lodash';
 import { AppState } from '../reducers';
 import { MovieTile } from './MovieTile';
-import { makeStyles } from '@material-ui/core/styles';
-import { searchMovies } from '../actions/movies';
 import { MovieSearchResult } from '../services/movies';
-import { updateQuery } from '../common/util';
+import { updateQuery, parseQuery } from '../common/util';
 
 type StateProps = {
   results: MovieSearchResult[];
@@ -42,18 +41,24 @@ const MovieSearchResults = (props: P) => {
       })
     });
   };
-  
-  if (!props.results.length) return <CircularProgress />;
+
+  const movieSearch = parseQuery(props.location.search).search;
 
   return (
     <div>
-      <Grid container spacing={4}>
-        {props.results.map((movie, i) => (
-          <Grid key={movie.imdbID + i} xs={3} item>
-            <MovieTile movie={movie} />
-          </Grid>
-        ))}
+      <Grid container spacing={4} justify="center" alignItems="center">
+        {props.results &&
+          props.results.map((movie, i) => (
+            <Grid key={movie.imdbID + i} xs={12} sm={6} md={4} lg={3} item>
+              <MovieTile movie={movie} />
+            </Grid>
+          ))}
       </Grid>
+      {!props.results && (
+        <Typography color="secondary" variant="h2">
+          No Results Found for "{movieSearch}".
+        </Typography>
+      )}
       {totalResults > 10 && (
         <ul className={classes.pagination}>
           {range(totalResults / 10).map((i: number) => (

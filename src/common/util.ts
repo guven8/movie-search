@@ -11,7 +11,7 @@ export const updateQuery = (
     ...newQuery
   });
 
-export const getMovieSearchFromQueryParams = (
+export const parseQuery = (
   queryParams: string
 ): MovieSearchDTO => {
   const query = qs.parse(queryParams.replace('?', '')) as QueryParamProps;

@@ -51,6 +51,11 @@ export type MovieSearchResults = {
   totalResults: string;
 };
 
+export type MovieSearchNoResults = {
+  Response: 'False';
+  Error: 'Movie not found!';
+};
+
 export class MovieService extends RemoteService {
   baseUri = config.baseUri;
   apiKey = config.apiKey;

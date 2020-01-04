@@ -9,6 +9,6 @@ export interface JSendFailure {
   statusText: 'OK';
   data: {
     Response: 'False',
-    Error: string;
+    Error: 'Movie not found!' | string;
   }
 }
