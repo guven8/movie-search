@@ -1,19 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { range } from 'lodash';
-import { AppState } from '../reducers';
 import { MovieTile } from './MovieTile';
 import { MovieSearchResult } from '../services/movies';
-import { updateQuery, parseQuery } from '../common/util';
 
-type StateProps = {
-  results: MovieSearchResult[];
-  totalResults: string | null;
+type P = {
+  searchResults: MovieSearchResult[];
+  searchQuery: string;
 };
-type P = StateProps & RouteComponentProps;
 
 const useStyles = makeStyles({
   pagination: {
@@ -21,58 +15,36 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-evenly',
     margin: '40px 0'
+  },
+  noResults: {
+    marginTop: 40
   }
 });
 
-const connectDecorator = connect((state: AppState) => ({
-  results: state.movies.searchResults.results,
-  totalResults: state.movies.searchResults.totalResults
-}));
-
 const MovieSearchResults = (props: P) => {
   const classes = useStyles({});
-  const totalResults = parseInt(props.totalResults);
-  const goToPage = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    e.preventDefault();
-    props.history.push({
-      pathname: props.location.pathname,
-      search: updateQuery(props.location.search, {
-        page: e.currentTarget.text
-      })
-    });
-  };
-
-  const movieSearch = parseQuery(props.location.search).search;
+  const handleScroll = (e) => {
+    const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+    console.log(e, bottom);
+  }
 
   return (
-    <div>
+    <div onScroll={handleScroll}>
       <Grid container spacing={4} justify="center" alignItems="center">
-        {props.results &&
-          props.results.map((movie, i) => (
+        {props.searchResults &&
+          props.searchResults.map((movie, i) => (
             <Grid key={movie.imdbID + i} xs={12} sm={6} md={4} lg={3} item>
               <MovieTile movie={movie} />
             </Grid>
           ))}
       </Grid>
-      {!props.results && (
-        <Typography color="secondary" variant="h2">
-          No Results Found for "{movieSearch}".
+      {!props.searchResults && (
+        <Typography color="secondary" variant="h2" className={classes.noResults}>
+          No Results Found for "{props.searchQuery}" :(
         </Typography>
-      )}
-      {totalResults > 10 && (
-        <ul className={classes.pagination}>
-          {range(totalResults / 10).map((i: number) => (
-            <li key={i}>
-              <a onClick={goToPage}>{i + 1}</a>
-            </li>
-          ))}
-        </ul>
       )}
     </div>
   );
 };
 
-const decoratedComponent = connectDecorator(
-  withRouter(MovieSearchResults) as any
-);
-export { decoratedComponent as MovieSearchResults };
+export { MovieSearchResults };

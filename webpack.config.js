@@ -6,7 +6,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     historyApiFallback: true,
     compress: true,
-    port: 3500
+    port: 3000
   },
   output: {
     filename: 'main.js',

@@ -5,14 +5,13 @@ import { searchMoviesAsync, getMovieByIdAsync } from '../actions/movies';
 import { combineReducers } from 'redux';
 
 export type MovieSearchResultsState = {
-  results: MovieSearchResult[] | false;
-  totalResults: string | null;
+  [searchQuery: string]: {
+    results: MovieSearchResult[];
+    totalResults: string | null;
+  }
 };
 
-const movieSearchResultsInitialState = {
-  results: [],
-  totalResults: null
-};
+const movieSearchResultsInitialState = {};
 
 function movieSearchResultsReducer(
   state: MovieSearchResultsState = movieSearchResultsInitialState,
@@ -20,8 +19,11 @@ function movieSearchResultsReducer(
 ) {
   if (isType(action, searchMoviesAsync.done)) {
     state = {
-      results: action.payload.result.Search,
-      totalResults: action.payload.result.totalResults
+      ...state,
+      [action.payload.params.search]: {
+        results: (state[action.payload.params.search]?.results || []).concat(action.payload.result.Search),
+        totalResults: action.payload.result.totalResults
+      }
     };
   }
   if (
@@ -30,8 +32,11 @@ function movieSearchResultsReducer(
     action.payload.error.Error === 'Movie not found!'
   ) {
     state = {
-      results: false,
-      totalResults: null
+      ...state,
+      [action.payload.params.search]: {
+        results: [],
+        totalResults: null
+      }
     };
   }
 

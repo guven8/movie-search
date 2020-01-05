@@ -2,6 +2,7 @@ import React from 'react';
 import { debounce } from 'lodash';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Autocomplete } from '@material-ui/lab';
+import classNames from 'classnames';
 import {
   IconButton,
   CircularProgress,
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down('xs')]: {
       // width: '100%'
     },
-    margin: '0 auto',
+    // margin: '0 auto',
     minWidth: 180,
     padding: 2,
     paddingLeft: 56,
@@ -42,6 +43,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       }
     }
   },
+  searchInputDirty: {
+    width: 165
+  },
   loadingSpinner: {
     position: 'absolute',
     right: 0
@@ -55,8 +59,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   group: {
     position: 'absolute',
-    // backgroundColor: 'springgreen',
-    width: 400
+    width: 341,
+    left: -56,
+    top: 1
   },
   searchResult: {
     display: 'flex',
@@ -113,14 +118,17 @@ function MovieSearchInput(props: P) {
     <div className={classes.container}>
       <Autocomplete
         id={movieAutoComplete}
-        className={classes.searchInput}
+        className={classNames({
+          [classes.searchInput]: true,
+          [classes.searchInputDirty]: !!search
+        })}
         onInputChange={onInputChange}
         onChange={onChange}
         getOptionLabel={getOptionLabel}
         options={options}
         loading={loading}
         freeSolo
-        debug
+        // debug
         renderInput={(params) => (
           <TextField
             {...params}
@@ -146,7 +154,6 @@ function MovieSearchInput(props: P) {
           />
         )}
         renderOption={(params: MovieSearchResult) => {
-          console.log(params);
           return (
             <div className={classes.searchResult}>
               <Avatar alt={params.Title} src={params.Poster} className="search-result-poster" />
